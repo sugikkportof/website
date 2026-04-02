@@ -1,0 +1,1680 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- ============================================================
+       SEO META — Change to match your business
+       ============================================================ -->
+  <title>[BUSINESS_NAME] — Premium [SERVICE_TYPE]</title>
+  <meta name="description" content="[TAGLINE] | [CITY], Indonesia" />
+  <meta name="keywords" content="[SERVICE_TYPE], [CITY], premium, luxury" />
+  <meta property="og:title" content="[BUSINESS_NAME]" />
+  <meta property="og:description" content="[TAGLINE]" />
+  <meta property="og:image" content="[OG_IMAGE_URL]" />
+
+  <!-- ============================================================
+       FONTS — Playfair Display (serif) + Poppins (sans)
+       ============================================================ -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <script>
+    /* ============================================================
+       TAILWIND CONFIG — Edit primary colours here
+       Primary  : #1A1A1A  (Deep Charcoal)
+       Accent   : #C5A47E  (Muted Gold)
+       Bg       : #F9F9F9  (Off-White)
+       ============================================================ */
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary:   '#1A1A1A',
+            accent:    '#C5A47E',
+            'accent-light': '#D4BC9E',
+            'accent-dark':  '#A8855A',
+            luxury:    '#F9F9F9',
+            'luxury-2':'#F2EDE8',
+            muted:     '#8A8A8A',
+          },
+          fontFamily: {
+            serif: ['"Playfair Display"', 'Georgia', 'serif'],
+            sans:  ['Poppins', 'sans-serif'],
+          },
+          letterSpacing: {
+            luxury: '0.25em',
+            wide:   '0.15em',
+          },
+          transitionDuration: { 600: '600ms', 800: '800ms', 1200: '1200ms' },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    /* ============================================================
+       CSS CUSTOM PROPERTIES — Single source of truth for theming
+       ============================================================ */
+    :root {
+      --clr-primary:      #1A1A1A;
+      --clr-accent:       #C5A47E;
+      --clr-accent-light: #D4BC9E;
+      --clr-accent-dark:  #A8855A;
+      --clr-bg:           #F9F9F9;
+      --clr-bg-2:         #F2EDE8;
+      --clr-muted:        #8A8A8A;
+      --clr-white:        #FFFFFF;
+      --font-serif:       'Playfair Display', Georgia, serif;
+      --font-sans:        'Poppins', sans-serif;
+    }
+
+    /* ---- Base -------------------------------------------------- */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-sans);
+      background: var(--clr-bg);
+      color: var(--clr-primary);
+      overflow-x: hidden;
+      cursor: none; /* custom cursor active */
+    }
+
+    /* ---- Custom Cursor ----------------------------------------- */
+    #cursor-dot {
+      width: 8px; height: 8px;
+      background: var(--clr-accent);
+      border-radius: 50%;
+      position: fixed; top: 0; left: 0;
+      pointer-events: none; z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: transform 0.1s ease;
+    }
+    #cursor-ring {
+      width: 36px; height: 36px;
+      border: 1.5px solid var(--clr-accent);
+      border-radius: 50%;
+      position: fixed; top: 0; left: 0;
+      pointer-events: none; z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: transform 0.18s ease, width 0.3s, height 0.3s, opacity 0.3s;
+      opacity: 0.6;
+    }
+    body:hover #cursor-ring { opacity: 1; }
+    a:hover ~ #cursor-ring, button:hover ~ #cursor-ring { width: 56px; height: 56px; }
+
+    /* ---- Page Loader ------------------------------------------- */
+    #page-loader {
+      position: fixed; inset: 0;
+      background: var(--clr-primary);
+      z-index: 10000;
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column; gap: 1.5rem;
+      transition: opacity 0.8s ease, visibility 0.8s ease;
+    }
+    #page-loader.hidden { opacity: 0; visibility: hidden; }
+    .loader-brand {
+      font-family: var(--font-serif);
+      font-size: clamp(1.8rem, 5vw, 3rem);
+      color: var(--clr-accent);
+      letter-spacing: 0.3em;
+      animation: fadeUpIn 0.8s ease forwards;
+    }
+    .loader-bar-track {
+      width: 200px; height: 1px;
+      background: rgba(197,164,126,0.2);
+      position: relative; overflow: hidden;
+    }
+    .loader-bar-fill {
+      height: 100%;
+      background: var(--clr-accent);
+      width: 0;
+      animation: fillBar 1.8s ease forwards 0.3s;
+    }
+    @keyframes fillBar { to { width: 100%; } }
+    @keyframes fadeUpIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ---- Navbar ----------------------------------------------- */
+    #navbar {
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      background: rgba(249,249,249,0.75);
+      border-bottom: 1px solid rgba(197,164,126,0.15);
+      transition: all 0.4s ease;
+    }
+    #navbar.scrolled {
+      background: rgba(249,249,249,0.92);
+      box-shadow: 0 4px 40px rgba(26,26,26,0.06);
+    }
+    .nav-link {
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--clr-primary);
+      position: relative;
+      transition: color 0.3s;
+    }
+    .nav-link::after {
+      content: '';
+      position: absolute; bottom: -2px; left: 0; width: 0; height: 1px;
+      background: var(--clr-accent);
+      transition: width 0.3s ease;
+    }
+    .nav-link:hover { color: var(--clr-accent); }
+    .nav-link:hover::after { width: 100%; }
+
+    /* Language Toggle */
+    .lang-btn {
+      font-size: 0.65rem; letter-spacing: 0.18em; text-transform: uppercase;
+      padding: 0.3rem 0.75rem;
+      border: 1px solid rgba(197,164,126,0.4);
+      border-radius: 2px;
+      cursor: pointer;
+      transition: all 0.3s;
+      background: transparent; color: var(--clr-muted);
+    }
+    .lang-btn.active {
+      background: var(--clr-accent);
+      border-color: var(--clr-accent);
+      color: white;
+    }
+
+    /* ---- Hero -------------------------------------------------- */
+    #hero {
+      min-height: 100svh;
+      background: var(--clr-primary);
+      position: relative; overflow: hidden;
+    }
+    /* ============================================================
+       HERO BACKGROUND — Replace the URL below with your own image
+       Tip: Use an unsplash URL or your CDN asset
+       ============================================================ */
+    .hero-bg {
+      position: absolute; inset: 0;
+      background-image: url('https://images.unsplash.com/photo-1560066984-138dadb4c035?w=1600&q=80');
+      background-size: cover; background-position: center;
+      transform-origin: center; will-change: transform;
+      transition: transform 0.1s linear;
+    }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg,
+        rgba(26,26,26,0.82) 0%,
+        rgba(26,26,26,0.55) 50%,
+        rgba(26,26,26,0.75) 100%);
+    }
+    .hero-eyebrow {
+      font-size: 0.65rem; letter-spacing: 0.35em; text-transform: uppercase;
+      color: var(--clr-accent); font-family: var(--font-sans); font-weight: 400;
+    }
+    .hero-heading {
+      font-family: var(--font-serif);
+      font-size: clamp(2.8rem, 7vw, 6.5rem);
+      line-height: 1.08;
+      color: var(--clr-white);
+      font-weight: 600;
+    }
+    .hero-heading em { color: var(--clr-accent); font-style: italic; }
+    .hero-sub {
+      color: rgba(255,255,255,0.65);
+      font-size: clamp(0.85rem, 1.5vw, 1rem);
+      line-height: 1.8; font-weight: 300;
+      max-width: 480px;
+    }
+
+    /* Stats Overlay */
+    .stats-pill {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(197,164,126,0.25);
+      backdrop-filter: blur(12px);
+      border-radius: 4px;
+      padding: 1.25rem 2rem;
+      text-align: center;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .stats-pill:hover {
+      border-color: var(--clr-accent);
+      transform: translateY(-4px);
+    }
+    .stats-num {
+      font-family: var(--font-serif);
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      color: var(--clr-accent);
+      font-weight: 600;
+    }
+    .stats-label {
+      font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: rgba(255,255,255,0.55); margin-top: 0.25rem;
+    }
+
+    /* CTA Buttons */
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      background: var(--clr-accent);
+      color: white;
+      font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase;
+      padding: 1rem 2.2rem;
+      border: 1px solid var(--clr-accent);
+      border-radius: 2px;
+      transition: all 0.35s ease;
+      cursor: pointer;
+      font-family: var(--font-sans); font-weight: 500;
+      text-decoration: none;
+    }
+    .btn-primary:hover {
+      background: transparent;
+      color: var(--clr-accent);
+    }
+    .btn-outline {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      background: transparent;
+      color: rgba(255,255,255,0.8);
+      font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase;
+      padding: 1rem 2.2rem;
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 2px;
+      transition: all 0.35s ease;
+      cursor: pointer;
+      font-family: var(--font-sans); font-weight: 400;
+      text-decoration: none;
+    }
+    .btn-outline:hover {
+      border-color: var(--clr-accent);
+      color: var(--clr-accent);
+    }
+
+    /* ---- Section Titles --------------------------------------- */
+    .section-eyebrow {
+      font-size: 0.62rem; letter-spacing: 0.35em; text-transform: uppercase;
+      color: var(--clr-accent); font-weight: 400;
+    }
+    .section-title {
+      font-family: var(--font-serif);
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 600; line-height: 1.15;
+      color: var(--clr-primary);
+    }
+    .section-title em { color: var(--clr-accent); font-style: italic; }
+    .title-rule {
+      width: 48px; height: 1px;
+      background: var(--clr-accent);
+      margin: 1rem 0;
+    }
+
+    /* ---- Value Proposition ------------------------------------ */
+    .value-card {
+      padding: 2.5rem 2rem;
+      border: 1px solid rgba(197,164,126,0.15);
+      border-radius: 3px;
+      transition: all 0.4s ease;
+      position: relative; overflow: hidden;
+      background: var(--clr-white);
+    }
+    .value-card::before {
+      content: '';
+      position: absolute; bottom: 0; left: 0; width: 0; height: 2px;
+      background: var(--clr-accent);
+      transition: width 0.5s ease;
+    }
+    .value-card:hover { transform: translateY(-8px); box-shadow: 0 20px 60px rgba(197,164,126,0.12); }
+    .value-card:hover::before { width: 100%; }
+    .value-icon {
+      width: 52px; height: 52px;
+      border: 1px solid rgba(197,164,126,0.3);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--clr-accent);
+      margin-bottom: 1.5rem;
+      font-size: 1.1rem;
+      transition: all 0.4s;
+    }
+    .value-card:hover .value-icon {
+      background: var(--clr-accent); color: white;
+      transform: rotate(15deg);
+    }
+
+    /* ---- Service Cards ---------------------------------------- */
+    .service-card {
+      background: var(--clr-white);
+      border: 1px solid rgba(26,26,26,0.06);
+      border-radius: 4px;
+      overflow: hidden;
+      transition: all 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      cursor: pointer;
+    }
+    .service-card:hover { transform: translateY(-10px); box-shadow: 0 30px 80px rgba(26,26,26,0.1); }
+    .service-img-wrap { overflow: hidden; height: 220px; position: relative; }
+    .service-img-wrap img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform 0.7s ease;
+    }
+    .service-card:hover .service-img-wrap img { transform: scale(1.08); }
+    .service-badge {
+      position: absolute; top: 1rem; right: 1rem;
+      background: var(--clr-accent);
+      color: white; font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase;
+      padding: 0.3rem 0.7rem; border-radius: 2px;
+    }
+    .service-body { padding: 1.75rem; }
+    .service-name {
+      font-family: var(--font-serif);
+      font-size: 1.25rem; font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+    .service-desc {
+      font-size: 0.83rem; color: var(--clr-muted);
+      line-height: 1.75; margin-bottom: 1.25rem;
+    }
+    .service-price {
+      font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--clr-accent); font-weight: 600;
+      margin-bottom: 1.25rem;
+    }
+    .btn-select-service {
+      width: 100%;
+      padding: 0.85rem 1rem;
+      font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase;
+      border: 1px solid var(--clr-primary);
+      background: transparent; color: var(--clr-primary);
+      border-radius: 2px;
+      transition: all 0.3s;
+      cursor: pointer; font-family: var(--font-sans); font-weight: 500;
+    }
+    .btn-select-service:hover, .btn-select-service.selected {
+      background: var(--clr-primary); color: var(--clr-accent);
+    }
+
+    /* ---- Brand Story Split ------------------------------------ */
+    #story { background: var(--clr-bg-2); }
+    .story-img-wrap {
+      /* ============================================================
+         STORY IMAGE — Replace with your brand/team photo
+         ============================================================ */
+      background-image: url('https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=900&q=80');
+      background-size: cover; background-position: center;
+      min-height: 500px;
+    }
+    .quote-mark {
+      font-family: var(--font-serif);
+      font-size: 8rem; line-height: 0.8;
+      color: var(--clr-accent); opacity: 0.2;
+      pointer-events: none; user-select: none;
+    }
+
+    /* ---- Gallery --------------------------------------------- */
+    .filter-btn {
+      font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase;
+      padding: 0.5rem 1.5rem;
+      border: 1px solid rgba(26,26,26,0.15);
+      background: transparent; color: var(--clr-muted);
+      border-radius: 2px; cursor: pointer;
+      transition: all 0.3s; font-family: var(--font-sans);
+    }
+    .filter-btn.active, .filter-btn:hover {
+      border-color: var(--clr-accent);
+      color: var(--clr-accent);
+      background: rgba(197,164,126,0.06);
+    }
+    .gallery-item {
+      overflow: hidden; border-radius: 3px; position: relative;
+      transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      cursor: pointer;
+    }
+    .gallery-item.hidden-item {
+      opacity: 0; transform: scale(0.92);
+      pointer-events: none; height: 0; margin: 0; padding: 0; overflow: hidden;
+    }
+    .gallery-item img {
+      width: 100%; height: 280px; object-fit: cover;
+      transition: transform 0.6s ease;
+      display: block;
+    }
+    .gallery-item:hover img { transform: scale(1.06); }
+    .gallery-caption {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(26,26,26,0.8) 0%, transparent 60%);
+      display: flex; align-items: flex-end; padding: 1.25rem;
+      opacity: 0; transition: opacity 0.4s;
+    }
+    .gallery-item:hover .gallery-caption { opacity: 1; }
+    .gallery-caption span {
+      font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase;
+      color: white;
+    }
+
+    /* ---- Testimonials ---------------------------------------- */
+    #testimonials { background: var(--clr-primary); }
+    .testi-card {
+      border: 1px solid rgba(197,164,126,0.15);
+      border-radius: 4px; padding: 2.5rem;
+      position: relative; overflow: hidden;
+      transition: border-color 0.4s, transform 0.4s;
+    }
+    .testi-card:hover {
+      border-color: rgba(197,164,126,0.4);
+      transform: translateY(-6px);
+    }
+    .testi-stars { color: var(--clr-accent); letter-spacing: 0.1em; font-size: 0.9rem; }
+    .testi-text {
+      font-family: var(--font-serif);
+      font-size: clamp(0.95rem, 1.5vw, 1.1rem);
+      color: rgba(255,255,255,0.8); line-height: 1.8; font-style: italic;
+      margin: 1.25rem 0;
+    }
+    .testi-name {
+      font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--clr-accent); font-weight: 500;
+    }
+    .testi-title {
+      font-size: 0.7rem; color: rgba(255,255,255,0.35);
+      margin-top: 0.2rem;
+    }
+
+    /* ---- Booking Form ----------------------------------------- */
+    #booking { background: var(--clr-bg-2); }
+    .form-group { margin-bottom: 1.5rem; }
+    .form-label {
+      display: block;
+      font-size: 0.62rem; letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--clr-muted); margin-bottom: 0.5rem; font-weight: 500;
+    }
+    .form-input, .form-select, .form-textarea {
+      width: 100%;
+      padding: 0.9rem 1.1rem;
+      font-family: var(--font-sans); font-size: 0.88rem;
+      background: var(--clr-white);
+      border: 1px solid rgba(26,26,26,0.1);
+      border-radius: 2px;
+      color: var(--clr-primary);
+      transition: border-color 0.3s;
+      outline: none;
+    }
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      border-color: var(--clr-accent);
+      box-shadow: 0 0 0 3px rgba(197,164,126,0.1);
+    }
+    .form-textarea { resize: vertical; min-height: 110px; }
+    .form-select { appearance: none; cursor: pointer;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23C5A47E' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 1.1rem center;
+    }
+    .btn-submit {
+      width: 100%;
+      padding: 1.1rem;
+      background: var(--clr-primary); color: var(--clr-accent);
+      font-size: 0.7rem; letter-spacing: 0.28em; text-transform: uppercase;
+      border: 1px solid var(--clr-primary);
+      border-radius: 2px;
+      cursor: pointer; font-family: var(--font-sans); font-weight: 500;
+      transition: all 0.35s;
+      display: flex; align-items: center; justify-content: center; gap: 0.75rem;
+    }
+    .btn-submit:hover {
+      background: var(--clr-accent); border-color: var(--clr-accent);
+      color: white;
+    }
+
+    /* ---- Floating CTAs --------------------------------------- */
+    .float-cta {
+      position: fixed; right: 1.5rem;
+      width: 52px; height: 52px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem; color: white;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.18);
+      z-index: 500; cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s;
+      text-decoration: none;
+      opacity: 0; transform: scale(0);
+      animation: floatIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+    .float-cta:hover { transform: scale(1.12); box-shadow: 0 12px 35px rgba(0,0,0,0.22); }
+    #float-wa  { bottom: 5.5rem; background: #25D366; animation-delay: 0.5s; }
+    #float-ig  { bottom: 10rem; background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); animation-delay: 0.7s; }
+    @keyframes floatIn {
+      to { opacity: 1; transform: scale(1); }
+    }
+    /* Pulse ring for WA */
+    #float-wa::before {
+      content: '';
+      position: absolute; inset: -8px;
+      border-radius: 50%;
+      border: 1.5px solid #25D366;
+      animation: pulseRing 2s ease-out infinite;
+    }
+    @keyframes pulseRing {
+      0%   { transform: scale(0.9); opacity: 0.8; }
+      100% { transform: scale(1.5); opacity: 0; }
+    }
+
+    /* ---- Scroll Reveal ---------------------------------------- */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.75s ease, transform 0.75s ease;
+    }
+    .reveal.revealed { opacity: 1; transform: translateY(0); }
+    .reveal-d1 { transition-delay: 0.1s; }
+    .reveal-d2 { transition-delay: 0.2s; }
+    .reveal-d3 { transition-delay: 0.3s; }
+    .reveal-d4 { transition-delay: 0.4s; }
+
+    /* ---- Misc ------------------------------------------------- */
+    .divider {
+      width: 1px; height: 80px;
+      background: linear-gradient(to bottom, transparent, var(--clr-accent), transparent);
+      margin: 0 auto;
+    }
+    .grain-overlay {
+      position: fixed; inset: 0; z-index: 9997; pointer-events: none;
+      opacity: 0.018;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    }
+
+    /* ---- Footer ----------------------------------------------- */
+    footer { background: var(--clr-primary); }
+    .footer-link {
+      font-size: 0.72rem; color: rgba(255,255,255,0.4);
+      text-decoration: none; letter-spacing: 0.1em;
+      transition: color 0.3s;
+    }
+    .footer-link:hover { color: var(--clr-accent); }
+
+    /* ---- Mobile Menu ------------------------------------------ */
+    #mobile-menu {
+      position: fixed; inset: 0;
+      background: var(--clr-primary);
+      z-index: 800;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 2.5rem;
+      transform: translateX(100%);
+      transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+    }
+    #mobile-menu.open { transform: translateX(0); }
+    .mobile-nav-link {
+      font-family: var(--font-serif);
+      font-size: 2rem; color: rgba(255,255,255,0.75);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    .mobile-nav-link:hover { color: var(--clr-accent); }
+
+    /* ---- Scrollbar -------------------------------------------- */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--clr-bg); }
+    ::-webkit-scrollbar-thumb { background: var(--clr-accent); border-radius: 2px; }
+  </style>
+</head>
+
+<body>
+
+<!-- ============================================================
+     GRAIN OVERLAY — subtle texture over the whole page
+     ============================================================ -->
+<div class="grain-overlay" aria-hidden="true"></div>
+
+<!-- ============================================================
+     PAGE LOADER
+     Change [BUSINESS_NAME] below
+     ============================================================ -->
+<div id="page-loader">
+  <div class="loader-brand">[BUSINESS_NAME]</div>
+  <div class="loader-bar-track"><div class="loader-bar-fill"></div></div>
+</div>
+
+<!-- ============================================================
+     CUSTOM CURSOR
+     ============================================================ -->
+<div id="cursor-dot" aria-hidden="true"></div>
+<div id="cursor-ring" aria-hidden="true"></div>
+
+<!-- ============================================================
+     MOBILE MENU
+     ============================================================ -->
+<div id="mobile-menu" aria-hidden="true">
+  <a href="#services" class="mobile-nav-link" data-en="Services" data-id="Layanan" onclick="closeMobileMenu()">Services</a>
+  <a href="#story"    class="mobile-nav-link" data-en="About"    data-id="Tentang"  onclick="closeMobileMenu()">About</a>
+  <a href="#gallery"  class="mobile-nav-link" data-en="Gallery"  data-id="Galeri"   onclick="closeMobileMenu()">Gallery</a>
+  <a href="#booking"  class="mobile-nav-link" data-en="Book Now" data-id="Reservasi" onclick="closeMobileMenu()">Book Now</a>
+  <div class="flex gap-2 mt-4">
+    <button class="lang-btn" id="mob-lang-en" onclick="setLang('en'); closeMobileMenu()">EN</button>
+    <button class="lang-btn" id="mob-lang-id" onclick="setLang('id'); closeMobileMenu()">ID</button>
+  </div>
+</div>
+
+<!-- ============================================================
+     NAVBAR
+     ============================================================ -->
+<nav id="navbar" class="fixed top-0 left-0 right-0 z-50">
+  <div class="max-w-7xl mx-auto px-6 lg:px-10 flex items-center justify-between h-16 lg:h-20">
+
+    <!-- Logo -->
+    <a href="#" class="flex items-center gap-3 no-underline">
+      <!-- ============================================================
+           LOGO — Replace the span with an <img> tag if you have a logo
+           Example: <img src="[LOGO_URL]" alt="[BUSINESS_NAME]" class="h-8">
+           ============================================================ -->
+      <span style="font-family:var(--font-serif); font-size:1.35rem; font-weight:600; color:var(--clr-primary); letter-spacing:0.05em;">
+        [BUSINESS_<em style="color:var(--clr-accent); font-style:italic;">NAME</em>]
+      </span>
+    </a>
+
+    <!-- Desktop Nav Links -->
+    <div class="hidden lg:flex items-center gap-8">
+      <a href="#services"      class="nav-link" data-en="Services"      data-id="Layanan">Services</a>
+      <a href="#story"         class="nav-link" data-en="About"         data-id="Tentang">About</a>
+      <a href="#gallery"       class="nav-link" data-en="Gallery"       data-id="Galeri">Gallery</a>
+      <a href="#testimonials"  class="nav-link" data-en="Reviews"       data-id="Ulasan">Reviews</a>
+    </div>
+
+    <!-- Right Controls -->
+    <div class="hidden lg:flex items-center gap-4">
+      <!-- Language Switcher -->
+      <div class="flex gap-1">
+        <button class="lang-btn active" id="nav-lang-en" onclick="setLang('en')">EN</button>
+        <button class="lang-btn"        id="nav-lang-id" onclick="setLang('id')">ID</button>
+      </div>
+      <!-- CTA -->
+      <a href="#booking" class="btn-primary py-2.5 px-5 text-xs">
+        <data-en data-en="Book Now" data-id="Reservasi">Book Now</data-en>
+        <i class="fa-solid fa-arrow-right text-xs"></i>
+      </a>
+    </div>
+
+    <!-- Hamburger -->
+    <button id="menu-toggle" class="lg:hidden flex flex-col gap-1.5 cursor-pointer z-50" onclick="toggleMobileMenu()" aria-label="Menu">
+      <span class="menu-bar block w-6 h-px bg-primary transition-all duration-300"></span>
+      <span class="menu-bar block w-4 h-px bg-primary transition-all duration-300"></span>
+      <span class="menu-bar block w-6 h-px bg-primary transition-all duration-300"></span>
+    </button>
+
+  </div>
+</nav>
+
+<!-- ============================================================
+     HERO SECTION
+     ============================================================ -->
+<section id="hero" class="relative flex items-center">
+  <div class="hero-bg" id="hero-bg"></div>
+  <div class="hero-overlay"></div>
+
+  <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-10 pt-32 pb-24 w-full">
+    <div class="max-w-2xl">
+
+      <p class="hero-eyebrow mb-5 reveal" data-en="[CITY] · Est. [YEAR]" data-id="[CITY] · Berdiri [YEAR]">
+        [CITY] · Est. [YEAR]
+      </p>
+
+      <h1 class="hero-heading mb-6 reveal reveal-d1">
+        <data-en data-en="Where Beauty" data-id="Di Mana Kecantikan">Where Beauty</data-en>
+        <br>
+        <em data-en="Meets Mastery" data-id="Bertemu Keahlian">Meets Mastery</em>
+      </h1>
+
+      <p class="hero-sub mb-10 reveal reveal-d2"
+         data-en="[TAGLINE_EN] — A sanctuary of premium treatments crafted for those who value excellence."
+         data-id="[TAGLINE_ID] — Ruang premium yang menghadirkan perawatan terbaik untuk Anda.">
+        [TAGLINE_EN] — A sanctuary of premium treatments crafted for those who value excellence.
+      </p>
+
+      <div class="flex flex-wrap gap-4 reveal reveal-d3">
+        <a href="#booking" class="btn-primary">
+          <span data-en="Reserve Your Session" data-id="Buat Reservasi">Reserve Your Session</span>
+          <i class="fa-solid fa-arrow-right text-xs"></i>
+        </a>
+        <a href="#services" class="btn-outline">
+          <i class="fa-regular fa-compass text-xs"></i>
+          <span data-en="Explore Services" data-id="Lihat Layanan">Explore Services</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- ---- Floating Stats ------------------------------------- -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mt-16 reveal reveal-d4">
+      <!-- Stat 1 — Change numbers below -->
+      <div class="stats-pill">
+        <div class="stats-num"><span class="counter" data-target="2400">0</span>+</div>
+        <div class="stats-label" data-en="Happy Clients"   data-id="Klien Puas">Happy Clients</div>
+      </div>
+      <!-- Stat 2 -->
+      <div class="stats-pill">
+        <div class="stats-num"><span class="counter" data-target="12">0</span>+</div>
+        <div class="stats-label" data-en="Expert Staff"    data-id="Staf Ahli">Expert Staff</div>
+      </div>
+      <!-- Stat 3 -->
+      <div class="stats-pill">
+        <div class="stats-num"><span class="counter" data-target="8">0</span></div>
+        <div class="stats-label" data-en="Years of Trust"  data-id="Tahun Kepercayaan">Years of Trust</div>
+      </div>
+      <!-- Stat 4 -->
+      <div class="stats-pill">
+        <div class="stats-num"><span class="counter" data-target="49">0</span>/5</div>
+        <div class="stats-label" data-en="Average Rating"  data-id="Rating Rata-rata">Average Rating</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Scroll indicator -->
+  <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-10">
+    <span style="font-size:0.55rem; letter-spacing:0.3em; text-transform:uppercase; color:rgba(255,255,255,0.4);">Scroll</span>
+    <div style="width:1px; height:48px; background:linear-gradient(to bottom, rgba(197,164,126,0.6), transparent);"></div>
+  </div>
+</section>
+
+<!-- ============================================================
+     VALUE PROPOSITION — Why Choose Us
+     ============================================================ -->
+<section id="values" class="py-28 lg:py-36">
+  <div class="max-w-7xl mx-auto px-6 lg:px-10">
+
+    <div class="text-center mb-20">
+      <p class="section-eyebrow mb-3 reveal" data-en="Our Promise" data-id="Janji Kami">Our Promise</p>
+      <div class="title-rule mx-auto reveal reveal-d1"></div>
+      <h2 class="section-title reveal reveal-d2">
+        <span data-en="Why Clients Choose" data-id="Mengapa Klien Memilih">Why Clients Choose</span>
+        <em data-en=" Us" data-id=" Kami"> Us</em>
+      </h2>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+      <!-- Value 1 -->
+      <div class="value-card reveal">
+        <div class="value-icon"><i class="fa-solid fa-award"></i></div>
+        <h3 class="font-serif text-xl font-semibold mb-3"
+            data-en="[VALUE_1_TITLE]" data-id="[VALUE_1_JUDUL]">Certified Excellence</h3>
+        <p class="text-sm text-muted leading-relaxed"
+           data-en="[VALUE_1_DESC_EN]"
+           data-id="[VALUE_1_DESC_ID]">
+          Every specialist holds international certifications, ensuring treatments meet the highest global standards.
+        </p>
+      </div>
+
+      <!-- Value 2 -->
+      <div class="value-card reveal reveal-d2">
+        <div class="value-icon"><i class="fa-solid fa-leaf"></i></div>
+        <h3 class="font-serif text-xl font-semibold mb-3"
+            data-en="[VALUE_2_TITLE]" data-id="[VALUE_2_JUDUL]">Premium Products Only</h3>
+        <p class="text-sm text-muted leading-relaxed"
+           data-en="[VALUE_2_DESC_EN]"
+           data-id="[VALUE_2_DESC_ID]">
+          We use only dermatologist-approved, luxury-grade products — safe for all skin types, delivering visible results.
+        </p>
+      </div>
+
+      <!-- Value 3 -->
+      <div class="value-card reveal reveal-d3">
+        <div class="value-icon"><i class="fa-solid fa-shield-halved"></i></div>
+        <h3 class="font-serif text-xl font-semibold mb-3"
+            data-en="[VALUE_3_TITLE]" data-id="[VALUE_3_JUDUL]">Personalised Care</h3>
+        <p class="text-sm text-muted leading-relaxed"
+           data-en="[VALUE_3_DESC_EN]"
+           data-id="[VALUE_3_DESC_ID]">
+          Every client receives a bespoke consultation to ensure the treatment plan is uniquely tailored to your needs.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ============================================================
+     SERVICES CATALOG
+     ============================================================ -->
+<section id="services" class="py-28 lg:py-36">
+  <div class="max-w-7xl mx-auto px-6 lg:px-10">
+
+    <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between mb-16 gap-6">
+      <div>
+        <p class="section-eyebrow mb-3 reveal" data-en="Our Treatments" data-id="Perawatan Kami">Our Treatments</p>
+        <div class="title-rule reveal reveal-d1"></div>
+        <h2 class="section-title reveal reveal-d2">
+          <span data-en="Signature " data-id="Layanan ">Signature </span>
+          <em data-en="Services" data-id="Unggulan">Services</em>
+        </h2>
+      </div>
+      <p class="text-sm text-muted max-w-xs leading-relaxed reveal reveal-d3"
+         data-en="Each treatment is thoughtfully designed to deliver transformative, lasting results."
+         data-id="Setiap perawatan dirancang untuk memberikan hasil nyata dan tahan lama.">
+        Each treatment is thoughtfully designed to deliver transformative, lasting results.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="service-grid">
+
+      <!-- ============================================================
+           SERVICE CARDS — Duplicate / edit this block per service
+           Change: data-service, image URL, name, desc, price
+           ============================================================ -->
+
+      <!-- Service 1 -->
+      <div class="service-card reveal"
+           data-service="[SERVICE_1]"
+           data-price="[PRICE_1]"
+           onclick="selectService('[SERVICE_1]', '[PRICE_1]')">
+        <div class="service-img-wrap">
+          <!-- Replace with your service image -->
+          <img src="https://images.unsplash.com/photo-1552693673-1bf958298935?w=600&q=80" alt="[SERVICE_1]" loading="lazy" />
+          <span class="service-badge" data-en="Bestseller" data-id="Terlaris">Bestseller</span>
+        </div>
+        <div class="service-body">
+          <div class="service-name" data-en="[SERVICE_1_EN]" data-id="[SERVICE_1_ID]">[SERVICE_1]</div>
+          <p class="service-desc"
+             data-en="[SERVICE_1_DESC_EN]"
+             data-id="[SERVICE_1_DESC_ID]">
+            A deeply restorative facial that combines advanced technology with luxurious botanicals for radiant, glass-like skin.
+          </p>
+          <div class="service-price">IDR [PRICE_1]</div>
+          <button class="btn-select-service"
+                  data-en="Select Service" data-id="Pilih Layanan">Select Service</button>
+        </div>
+      </div>
+
+      <!-- Service 2 -->
+      <div class="service-card reveal reveal-d2"
+           data-service="[SERVICE_2]"
+           data-price="[PRICE_2]"
+           onclick="selectService('[SERVICE_2]', '[PRICE_2]')">
+        <div class="service-img-wrap">
+          <img src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=600&q=80" alt="[SERVICE_2]" loading="lazy" />
+          <span class="service-badge" data-en="New" data-id="Baru">New</span>
+        </div>
+        <div class="service-body">
+          <div class="service-name" data-en="[SERVICE_2_EN]" data-id="[SERVICE_2_ID]">[SERVICE_2]</div>
+          <p class="service-desc"
+             data-en="[SERVICE_2_DESC_EN]"
+             data-id="[SERVICE_2_DESC_ID]">
+            Our signature body ritual blending warm aromatherapy oils and skilled massage techniques for total rejuvenation.
+          </p>
+          <div class="service-price">IDR [PRICE_2]</div>
+          <button class="btn-select-service"
+                  data-en="Select Service" data-id="Pilih Layanan">Select Service</button>
+        </div>
+      </div>
+
+      <!-- Service 3 -->
+      <div class="service-card reveal reveal-d3"
+           data-service="[SERVICE_3]"
+           data-price="[PRICE_3]"
+           onclick="selectService('[SERVICE_3]', '[PRICE_3]')">
+        <div class="service-img-wrap">
+          <img src="https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?w=600&q=80" alt="[SERVICE_3]" loading="lazy" />
+        </div>
+        <div class="service-body">
+          <div class="service-name" data-en="[SERVICE_3_EN]" data-id="[SERVICE_3_ID]">[SERVICE_3]</div>
+          <p class="service-desc"
+             data-en="[SERVICE_3_DESC_EN]"
+             data-id="[SERVICE_3_DESC_ID]">
+            Precision sculpting and contouring treatment using next-generation technology for visible lifting and firming.
+          </p>
+          <div class="service-price">IDR [PRICE_3]</div>
+          <button class="btn-select-service"
+                  data-en="Select Service" data-id="Pilih Layanan">Select Service</button>
+        </div>
+      </div>
+
+      <!-- Service 4 -->
+      <div class="service-card reveal"
+           data-service="[SERVICE_4]"
+           data-price="[PRICE_4]"
+           onclick="selectService('[SERVICE_4]', '[PRICE_4]')">
+        <div class="service-img-wrap">
+          <img src="https://images.unsplash.com/photo-1600334089648-b0d9d3028eb2?w=600&q=80" alt="[SERVICE_4]" loading="lazy" />
+        </div>
+        <div class="service-body">
+          <div class="service-name" data-en="[SERVICE_4_EN]" data-id="[SERVICE_4_ID]">[SERVICE_4]</div>
+          <p class="service-desc"
+             data-en="[SERVICE_4_DESC_EN]"
+             data-id="[SERVICE_4_DESC_ID]">
+            Medical-grade brightening protocol targeting hyperpigmentation, uneven tone, and sun damage effectively.
+          </p>
+          <div class="service-price">IDR [PRICE_4]</div>
+          <button class="btn-select-service"
+                  data-en="Select Service" data-id="Pilih Layanan">Select Service</button>
+        </div>
+      </div>
+
+      <!-- Service 5 -->
+      <div class="service-card reveal reveal-d2"
+           data-service="[SERVICE_5]"
+           data-price="[PRICE_5]"
+           onclick="selectService('[SERVICE_5]', '[PRICE_5]')">
+        <div class="service-img-wrap">
+          <img src="https://images.unsplash.com/photo-1519415510236-718bdfcd89c8?w=600&q=80" alt="[SERVICE_5]" loading="lazy" />
+        </div>
+        <div class="service-body">
+          <div class="service-name" data-en="[SERVICE_5_EN]" data-id="[SERVICE_5_ID]">[SERVICE_5]</div>
+          <p class="service-desc"
+             data-en="[SERVICE_5_DESC_EN]"
+             data-id="[SERVICE_5_DESC_ID]">
+            An indulgent hair & scalp treatment restoring strength, shine, and silkiness with keratin-infused formulas.
+          </p>
+          <div class="service-price">IDR [PRICE_5]</div>
+          <button class="btn-select-service"
+                  data-en="Select Service" data-id="Pilih Layanan">Select Service</button>
+        </div>
+      </div>
+
+      <!-- Service 6 -->
+      <div class="service-card reveal reveal-d3"
+           data-service="[SERVICE_6]"
+           data-price="[PRICE_6]"
+           onclick="selectService('[SERVICE_6]', '[PRICE_6]')">
+        <div class="service-img-wrap">
+          <img src="https://images.unsplash.com/photo-1610569015985-85c3cf1c7a8a?w=600&q=80" alt="[SERVICE_6]" loading="lazy" />
+        </div>
+        <div class="service-body">
+          <div class="service-name" data-en="[SERVICE_6_EN]" data-id="[SERVICE_6_ID]">[SERVICE_6]</div>
+          <p class="service-desc"
+             data-en="[SERVICE_6_DESC_EN]"
+             data-id="[SERVICE_6_DESC_ID]">
+            Holistic wellness session combining guided breathwork, reflexology, and soothing hot stone therapy.
+          </p>
+          <div class="service-price">IDR [PRICE_6]</div>
+          <button class="btn-select-service"
+                  data-en="Select Service" data-id="Pilih Layanan">Select Service</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     BRAND PHILOSOPHY / STORY — Split Screen
+     ============================================================ -->
+<section id="story" class="overflow-hidden">
+  <div class="grid grid-cols-1 lg:grid-cols-2">
+
+    <!-- Image Side -->
+    <div class="story-img-wrap reveal"></div>
+
+    <!-- Text Side -->
+    <div class="flex items-center bg-primary px-10 lg:px-16 py-20 lg:py-28">
+      <div class="max-w-lg">
+        <div class="quote-mark">"</div>
+        <p class="section-eyebrow mb-4 reveal" style="color:var(--clr-accent);"
+           data-en="Our Philosophy" data-id="Filosofi Kami">Our Philosophy</p>
+        <div class="title-rule reveal reveal-d1" style="background:var(--clr-accent);"></div>
+        <h2 class="reveal reveal-d2" style="font-family:var(--font-serif); font-size:clamp(1.8rem,3.5vw,2.8rem); font-weight:600; line-height:1.2; color:white; margin-bottom:1.5rem;">
+          <span data-en="Beauty Is Not a " data-id="Kecantikan Bukan ">Beauty Is Not a </span>
+          <em style="color:var(--clr-accent);"
+              data-en="Destination." data-id="Tujuan Akhir.">Destination.</em>
+          <br>
+          <span data-en="It's a Journey." data-id="Ini Adalah Perjalanan.">It's a Journey.</span>
+        </h2>
+        <p class="reveal reveal-d3" style="font-size:0.9rem; color:rgba(255,255,255,0.55); line-height:1.9;"
+           data-en="[BRAND_STORY_EN]"
+           data-id="[BRAND_STORY_ID]">
+          Founded on the belief that every person deserves to feel extraordinary, [BUSINESS_NAME] was born from a passion for artistry and a commitment to care. Each visit is crafted to be more than a treatment — it is a ritual of self-renewal, guided by expertise and wrapped in warmth.
+        </p>
+        <div class="reveal reveal-d4 mt-8 flex items-center gap-5">
+          <a href="#booking" class="btn-primary">
+            <span data-en="Begin Your Journey" data-id="Mulai Perjalanan Anda">Begin Your Journey</span>
+          </a>
+        </div>
+
+        <!-- Founder Signature -->
+        <div class="mt-10 pt-10 border-t reveal" style="border-color:rgba(197,164,126,0.15);">
+          <p style="font-family:var(--font-serif); font-size:1.4rem; font-style:italic; color:var(--clr-accent);">[FOUNDER_NAME]</p>
+          <p style="font-size:0.62rem; letter-spacing:0.25em; text-transform:uppercase; color:rgba(255,255,255,0.3); margin-top:0.25rem;"
+             data-en="Founder & Director" data-id="Pendiri & Direktur">Founder & Director</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     FILTERABLE GALLERY
+     ============================================================ -->
+<section id="gallery" class="py-28 lg:py-36">
+  <div class="max-w-7xl mx-auto px-6 lg:px-10">
+
+    <div class="text-center mb-12">
+      <p class="section-eyebrow mb-3 reveal" data-en="Portfolio" data-id="Portofolio">Portfolio</p>
+      <div class="title-rule mx-auto reveal reveal-d1"></div>
+      <h2 class="section-title reveal reveal-d2">
+        <span data-en="Our " data-id="Hasil ">Our </span>
+        <em data-en="Gallery" data-id="Karya Kami">Gallery</em>
+      </h2>
+    </div>
+
+    <!-- Filter Buttons -->
+    <!-- ============================================================
+         Add / rename categories to match your business niche
+         ============================================================ -->
+    <div class="flex flex-wrap justify-center gap-3 mb-12 reveal reveal-d3">
+      <button class="filter-btn active" data-filter="all"     data-en="All"       data-id="Semua">All</button>
+      <button class="filter-btn"        data-filter="facility" data-en="Facility"  data-id="Fasilitas">Facility</button>
+      <button class="filter-btn"        data-filter="treatment" data-en="Treatment" data-id="Perawatan">Treatment</button>
+      <button class="filter-btn"        data-filter="results"   data-en="Results"   data-id="Hasil">Results</button>
+    </div>
+
+    <!-- Gallery Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="gallery-grid">
+
+      <!-- ============================================================
+           GALLERY ITEMS — Replace src URLs and data-category
+           Categories: facility | treatment | results
+           ============================================================ -->
+      <div class="gallery-item reveal"           data-category="facility">
+        <img src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=700&q=80" alt="Facility" loading="lazy" />
+        <div class="gallery-caption"><span data-en="Treatment Room" data-id="Ruang Perawatan">Treatment Room</span></div>
+      </div>
+      <div class="gallery-item reveal reveal-d1" data-category="treatment">
+        <img src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=700&q=80" alt="Treatment" loading="lazy" />
+        <div class="gallery-caption"><span data-en="Facial Treatment" data-id="Perawatan Wajah">Facial Treatment</span></div>
+      </div>
+      <div class="gallery-item reveal reveal-d2" data-category="results">
+        <img src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=700&q=80" alt="Results" loading="lazy" />
+        <div class="gallery-caption"><span data-en="Before & After" data-id="Sebelum & Sesudah">Before & After</span></div>
+      </div>
+      <div class="gallery-item reveal"           data-category="facility">
+        <img src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=700&q=80" alt="Lounge" loading="lazy" />
+        <div class="gallery-caption"><span data-en="Relaxation Lounge" data-id="Ruang Relaksasi">Relaxation Lounge</span></div>
+      </div>
+      <div class="gallery-item reveal reveal-d1" data-category="treatment">
+        <img src="https://images.unsplash.com/photo-1600334089648-b0d9d3028eb2?w=700&q=80" alt="Massage" loading="lazy" />
+        <div class="gallery-caption"><span data-en="Body Massage" data-id="Pijat Tubuh">Body Massage</span></div>
+      </div>
+      <div class="gallery-item reveal reveal-d2" data-category="results">
+        <img src="https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?w=700&q=80" alt="Glowing" loading="lazy" />
+        <div class="gallery-caption"><span data-en="Glowing Results" data-id="Hasil Bercahaya">Glowing Results</span></div>
+      </div>
+      <div class="gallery-item reveal"           data-category="facility">
+        <img src="https://images.unsplash.com/photo-1588880331179-bc9b93a8cb5e?w=700&q=80" alt="Ambience" loading="lazy" />
+        <div class="gallery-caption"><span data-en="Premium Ambience" data-id="Suasana Premium">Premium Ambience</span></div>
+      </div>
+      <div class="gallery-item reveal reveal-d1" data-category="treatment">
+        <img src="https://images.unsplash.com/photo-1501793082595-6f0e84b63cf9?w=700&q=80" alt="Skincare" loading="lazy" />
+        <div class="gallery-caption"><span data-en="Skincare Ritual" data-id="Ritual Kulit">Skincare Ritual</span></div>
+      </div>
+      <div class="gallery-item reveal reveal-d2" data-category="results">
+        <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=700&q=80" alt="After" loading="lazy" />
+        <div class="gallery-caption"><span data-en="After Treatment" data-id="Pasca Perawatan">After Treatment</span></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     TESTIMONIALS
+     ============================================================ -->
+<section id="testimonials" class="py-28 lg:py-36">
+  <div class="max-w-7xl mx-auto px-6 lg:px-10">
+
+    <div class="text-center mb-16">
+      <p class="section-eyebrow mb-3 reveal" style="color:var(--clr-accent);"
+         data-en="Client Stories" data-id="Cerita Klien">Client Stories</p>
+      <div class="title-rule mx-auto reveal reveal-d1" style="background:var(--clr-accent);"></div>
+      <h2 class="reveal reveal-d2" style="font-family:var(--font-serif); font-size:clamp(2rem,4vw,3.2rem); font-weight:600; color:white;">
+        <span data-en="What They " data-id="Apa Yang ">What They </span>
+        <em style="color:var(--clr-accent);"
+            data-en="Say About Us" data-id="Mereka Katakan">Say About Us</em>
+      </h2>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+      <!-- ============================================================
+           TESTIMONIALS — Edit names, text, titles below
+           ============================================================ -->
+
+      <!-- Testimonial 1 -->
+      <div class="testi-card reveal">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text"
+           data-en="[TESTIMONIAL_1_EN]"
+           data-id="[TESTIMONIAL_1_ID]">
+          "I've visited many premium clinics across Bali, but nothing compares to the level of care and expertise here. My skin has truly transformed."
+        </p>
+        <div>
+          <div class="testi-name">[CLIENT_1_NAME]</div>
+          <div class="testi-title" data-en="[CLIENT_1_TITLE_EN]" data-id="[CLIENT_1_TITLE_ID]">Loyal Client, [CITY]</div>
+        </div>
+      </div>
+
+      <!-- Testimonial 2 -->
+      <div class="testi-card reveal reveal-d2">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text"
+           data-en="[TESTIMONIAL_2_EN]"
+           data-id="[TESTIMONIAL_2_ID]">
+          "From the moment you walk in, you feel the difference. The ambience, the professionalism, and the results — all five stars, every single time."
+        </p>
+        <div>
+          <div class="testi-name">[CLIENT_2_NAME]</div>
+          <div class="testi-title" data-en="[CLIENT_2_TITLE_EN]" data-id="[CLIENT_2_TITLE_ID]">Regular Client, Jakarta</div>
+        </div>
+      </div>
+
+      <!-- Testimonial 3 -->
+      <div class="testi-card reveal reveal-d3">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text"
+           data-en="[TESTIMONIAL_3_EN]"
+           data-id="[TESTIMONIAL_3_ID]">
+          "The booking process was seamless, the staff incredibly attentive, and my treatment results were beyond expectations. Highly recommend."
+        </p>
+        <div>
+          <div class="testi-name">[CLIENT_3_NAME]</div>
+          <div class="testi-title" data-en="[CLIENT_3_TITLE_EN]" data-id="[CLIENT_3_TITLE_ID]">First-time Visitor, Surabaya</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     BOOKING ENGINE
+     ============================================================ -->
+<section id="booking" class="py-28 lg:py-36">
+  <div class="max-w-6xl mx-auto px-6 lg:px-10">
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+
+      <!-- Left: Info -->
+      <div>
+        <p class="section-eyebrow mb-3 reveal" data-en="Reservation" data-id="Reservasi">Reservation</p>
+        <div class="title-rule reveal reveal-d1"></div>
+        <h2 class="section-title mb-6 reveal reveal-d2">
+          <span data-en="Book Your " data-id="Jadwalkan ">Book Your </span>
+          <em data-en="Session" data-id="Sesi Anda">Session</em>
+        </h2>
+        <p class="text-sm text-muted leading-relaxed mb-10 reveal reveal-d3"
+           data-en="Complete the form and we'll confirm your booking via WhatsApp within 1 hour during business hours."
+           data-id="Isi formulir dan kami akan konfirmasi reservasi Anda via WhatsApp dalam 1 jam selama jam kerja.">
+          Complete the form and we'll confirm your booking via WhatsApp within 1 hour during business hours.
+        </p>
+
+        <!-- Contact Info -->
+        <div class="space-y-5 reveal reveal-d4">
+          <div class="flex items-center gap-4">
+            <div style="width:40px; height:40px; border:1px solid rgba(197,164,126,0.25); border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--clr-accent); font-size:0.85rem; flex-shrink:0;">
+              <i class="fa-solid fa-location-dot"></i>
+            </div>
+            <div>
+              <div style="font-size:0.62rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--clr-muted); margin-bottom:0.2rem;"
+                   data-en="Address" data-id="Alamat">Address</div>
+              <div style="font-size:0.9rem;">[BUSINESS_ADDRESS]</div>
+            </div>
+          </div>
+          <div class="flex items-center gap-4">
+            <div style="width:40px; height:40px; border:1px solid rgba(197,164,126,0.25); border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--clr-accent); font-size:0.85rem; flex-shrink:0;">
+              <i class="fa-brands fa-whatsapp"></i>
+            </div>
+            <div>
+              <div style="font-size:0.62rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--clr-muted); margin-bottom:0.2rem;">WhatsApp</div>
+              <!-- ============================================================
+                   Change WA number here
+                   ============================================================ -->
+              <div style="font-size:0.9rem;">[WA_NUMBER_DISPLAY]</div>
+            </div>
+          </div>
+          <div class="flex items-center gap-4">
+            <div style="width:40px; height:40px; border:1px solid rgba(197,164,126,0.25); border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--clr-accent); font-size:0.85rem; flex-shrink:0;">
+              <i class="fa-regular fa-clock"></i>
+            </div>
+            <div>
+              <div style="font-size:0.62rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--clr-muted); margin-bottom:0.2rem;"
+                   data-en="Hours" data-id="Jam Buka">Hours</div>
+              <div style="font-size:0.9rem;" data-en="[HOURS_EN]" data-id="[HOURS_ID]">[HOURS_EN]</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Form -->
+      <div class="reveal reveal-d2">
+        <div style="background:white; border:1px solid rgba(197,164,126,0.15); border-radius:4px; padding:2.5rem;">
+
+          <div class="form-group">
+            <label class="form-label" data-en="Full Name" data-id="Nama Lengkap">Full Name</label>
+            <input class="form-input" id="f-name" type="text"
+                   data-en="Enter your full name" data-id="Masukkan nama lengkap Anda"
+                   placeholder="Enter your full name" required />
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div class="form-group">
+              <label class="form-label" data-en="Phone (WA)" data-id="Nomor HP (WA)">Phone (WA)</label>
+              <input class="form-input" id="f-phone" type="tel"
+                     placeholder="+62 8xx xxxx xxxx" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label" data-en="Preferred Date" data-id="Tanggal Pilihan">Preferred Date</label>
+              <input class="form-input" id="f-date" type="date" required />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" data-en="Select Service" data-id="Pilih Layanan">Select Service</label>
+            <!-- ============================================================
+                 SERVICE DROPDOWN — Add your service names here
+                 This will also be auto-filled when clicking a service card
+                 ============================================================ -->
+            <select class="form-select" id="f-service" required>
+              <option value="" data-en="-- Choose a Treatment --" data-id="-- Pilih Perawatan --">-- Choose a Treatment --</option>
+              <option value="[SERVICE_1]" data-en="[SERVICE_1_EN]" data-id="[SERVICE_1_ID]">[SERVICE_1]</option>
+              <option value="[SERVICE_2]" data-en="[SERVICE_2_EN]" data-id="[SERVICE_2_ID]">[SERVICE_2]</option>
+              <option value="[SERVICE_3]" data-en="[SERVICE_3_EN]" data-id="[SERVICE_3_ID]">[SERVICE_3]</option>
+              <option value="[SERVICE_4]" data-en="[SERVICE_4_EN]" data-id="[SERVICE_4_ID]">[SERVICE_4]</option>
+              <option value="[SERVICE_5]" data-en="[SERVICE_5_EN]" data-id="[SERVICE_5_ID]">[SERVICE_5]</option>
+              <option value="[SERVICE_6]" data-en="[SERVICE_6_EN]" data-id="[SERVICE_6_ID]">[SERVICE_6]</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" data-en="Notes (optional)" data-id="Catatan (opsional)">Notes (optional)</label>
+            <textarea class="form-textarea" id="f-notes"
+                      data-en="Any skin concerns, allergies, or special requests..."
+                      data-id="Kondisi kulit, alergi, atau permintaan khusus..."
+                      placeholder="Any skin concerns, allergies, or special requests..."></textarea>
+          </div>
+
+          <button class="btn-submit" onclick="submitBooking()">
+            <i class="fa-brands fa-whatsapp text-base"></i>
+            <span data-en="Send via WhatsApp" data-id="Kirim via WhatsApp">Send via WhatsApp</span>
+          </button>
+
+          <p class="text-center mt-4" style="font-size:0.68rem; color:var(--clr-muted); letter-spacing:0.05em;"
+             data-en="You'll be redirected to WhatsApp to confirm."
+             data-id="Anda akan diarahkan ke WhatsApp untuk konfirmasi.">
+            You'll be redirected to WhatsApp to confirm.
+          </p>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     FOOTER
+     ============================================================ -->
+<footer class="py-16">
+  <div class="max-w-7xl mx-auto px-6 lg:px-10">
+
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-12 mb-12">
+
+      <!-- Brand -->
+      <div class="lg:col-span-2">
+        <p style="font-family:var(--font-serif); font-size:1.5rem; font-weight:600; color:white; letter-spacing:0.05em; margin-bottom:1rem;">
+          [BUSINESS_<em style="color:var(--clr-accent); font-style:italic;">NAME</em>]
+        </p>
+        <p style="font-size:0.83rem; color:rgba(255,255,255,0.35); line-height:1.8; max-width:320px;"
+           data-en="[FOOTER_TAGLINE_EN]"
+           data-id="[FOOTER_TAGLINE_ID]">
+          A sanctuary of premium beauty and wellness services — where expertise meets artistry.
+        </p>
+        <!-- Social Icons -->
+        <div class="flex gap-4 mt-6">
+          <!-- ============================================================
+               Replace href with your social profile URLs
+               ============================================================ -->
+          <a href="https://instagram.com/[IG_HANDLE]" target="_blank" rel="noopener"
+             style="width:38px; height:38px; border:1px solid rgba(197,164,126,0.2); border-radius:50%; display:flex; align-items:center; justify-content:center; color:rgba(255,255,255,0.4); font-size:0.9rem; transition:all 0.3s; text-decoration:none;"
+             onmouseover="this.style.borderColor='var(--clr-accent)'; this.style.color='var(--clr-accent)'"
+             onmouseout="this.style.borderColor='rgba(197,164,126,0.2)'; this.style.color='rgba(255,255,255,0.4)'">
+            <i class="fa-brands fa-instagram"></i>
+          </a>
+          <a href="https://wa.me/[WA_NUMBER]" target="_blank" rel="noopener"
+             style="width:38px; height:38px; border:1px solid rgba(197,164,126,0.2); border-radius:50%; display:flex; align-items:center; justify-content:center; color:rgba(255,255,255,0.4); font-size:0.9rem; transition:all 0.3s; text-decoration:none;"
+             onmouseover="this.style.borderColor='var(--clr-accent)'; this.style.color='var(--clr-accent)'"
+             onmouseout="this.style.borderColor='rgba(197,164,126,0.2)'; this.style.color='rgba(255,255,255,0.4)'">
+            <i class="fa-brands fa-whatsapp"></i>
+          </a>
+          <a href="https://tiktok.com/@[TT_HANDLE]" target="_blank" rel="noopener"
+             style="width:38px; height:38px; border:1px solid rgba(197,164,126,0.2); border-radius:50%; display:flex; align-items:center; justify-content:center; color:rgba(255,255,255,0.4); font-size:0.9rem; transition:all 0.3s; text-decoration:none;"
+             onmouseover="this.style.borderColor='var(--clr-accent)'; this.style.color='var(--clr-accent)'"
+             onmouseout="this.style.borderColor='rgba(197,164,126,0.2)'; this.style.color='rgba(255,255,255,0.4)'">
+            <i class="fa-brands fa-tiktok"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Quick Links -->
+      <div>
+        <p style="font-size:0.62rem; letter-spacing:0.28em; text-transform:uppercase; color:var(--clr-accent); margin-bottom:1.25rem;"
+           data-en="Quick Links" data-id="Tautan Cepat">Quick Links</p>
+        <ul class="space-y-3">
+          <li><a href="#services"     class="footer-link" data-en="Services"     data-id="Layanan">Services</a></li>
+          <li><a href="#story"        class="footer-link" data-en="About Us"     data-id="Tentang Kami">About Us</a></li>
+          <li><a href="#gallery"      class="footer-link" data-en="Gallery"      data-id="Galeri">Gallery</a></li>
+          <li><a href="#testimonials" class="footer-link" data-en="Reviews"      data-id="Ulasan">Reviews</a></li>
+          <li><a href="#booking"      class="footer-link" data-en="Book Now"     data-id="Reservasi">Book Now</a></li>
+        </ul>
+      </div>
+
+      <!-- Contact -->
+      <div>
+        <p style="font-size:0.62rem; letter-spacing:0.28em; text-transform:uppercase; color:var(--clr-accent); margin-bottom:1.25rem;"
+           data-en="Contact" data-id="Kontak">Contact</p>
+        <ul class="space-y-3">
+          <li style="font-size:0.83rem; color:rgba(255,255,255,0.4);">[BUSINESS_ADDRESS]</li>
+          <li><a href="https://wa.me/[WA_NUMBER]" class="footer-link">[WA_NUMBER_DISPLAY]</a></li>
+          <li><a href="mailto:[EMAIL]" class="footer-link">[EMAIL]</a></li>
+          <li style="font-size:0.83rem; color:rgba(255,255,255,0.4);"
+              data-en="[HOURS_EN]" data-id="[HOURS_ID]">[HOURS_EN]</li>
+        </ul>
+      </div>
+    </div>
+
+    <div style="border-top:1px solid rgba(255,255,255,0.06); padding-top:2rem; display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:1rem;">
+      <p style="font-size:0.7rem; color:rgba(255,255,255,0.2); letter-spacing:0.05em;">
+        &copy; <span id="year"></span> [BUSINESS_NAME]. 
+        <span data-en="All rights reserved." data-id="Hak cipta dilindungi.">All rights reserved.</span>
+      </p>
+      <p style="font-size:0.65rem; color:rgba(255,255,255,0.15); letter-spacing:0.1em; text-transform:uppercase;">
+        <span data-en="Designed with" data-id="Dirancang dengan">Designed with</span> ♥ 
+        <span data-en="in Bali" data-id="di Bali">in Bali</span>
+      </p>
+    </div>
+
+  </div>
+</footer>
+
+<!-- ============================================================
+     FLOATING CTAs
+     ============================================================ -->
+<!-- ============================================================
+     Change href WA numbers and Instagram handle
+     ============================================================ -->
+<a id="float-wa" class="float-cta"
+   href="https://wa.me/[WA_NUMBER]?text=Halo%20[BUSINESS_NAME],%20saya%20ingin%20booking."
+   target="_blank" rel="noopener" aria-label="WhatsApp">
+  <i class="fa-brands fa-whatsapp text-xl"></i>
+</a>
+<a id="float-ig" class="float-cta"
+   href="https://instagram.com/[IG_HANDLE]"
+   target="_blank" rel="noopener" aria-label="Instagram">
+  <i class="fa-brands fa-instagram text-lg"></i>
+</a>
+
+<!-- ============================================================
+     JAVASCRIPT ENGINE
+     ============================================================ -->
+<script>
+/* ====================================================================
+   CONFIGURATION — Edit these at the top of this script block
+   ==================================================================== */
+
+// ============================================================
+// WA_NUMBER: International format, no + or spaces
+// Example: '6281234567890'
+// ============================================================
+const WA_NUMBER = '[WA_NUMBER]';
+
+// ============================================================
+// STATS_COUNTER — The 4th stat shows X/5 (e.g. rating 4.9)
+// Data is set inline via data-target on counter spans
+// ============================================================
+
+/* ====================================================================
+   PAGE LOADER
+   ==================================================================== */
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.getElementById('page-loader').classList.add('hidden');
+  }, 2000);
+});
+
+/* ====================================================================
+   YEAR
+   ==================================================================== */
+document.getElementById('year').textContent = new Date().getFullYear();
+
+/* ====================================================================
+   CUSTOM CURSOR
+   ==================================================================== */
+const dot  = document.getElementById('cursor-dot');
+const ring = document.getElementById('cursor-ring');
+document.addEventListener('mousemove', e => {
+  dot.style.left  = e.clientX + 'px';
+  dot.style.top   = e.clientY + 'px';
+  ring.style.left = e.clientX + 'px';
+  ring.style.top  = e.clientY + 'px';
+});
+document.addEventListener('mousedown', () => { dot.style.transform = 'translate(-50%,-50%) scale(2.2)'; });
+document.addEventListener('mouseup',   () => { dot.style.transform = 'translate(-50%,-50%) scale(1)'; });
+
+/* ====================================================================
+   NAVBAR SCROLL EFFECT
+   ==================================================================== */
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  navbar.classList.toggle('scrolled', window.scrollY > 60);
+});
+
+/* ====================================================================
+   HERO PARALLAX
+   ==================================================================== */
+const heroBg = document.getElementById('hero-bg');
+window.addEventListener('scroll', () => {
+  if (window.scrollY < window.innerHeight) {
+    heroBg.style.transform = `translateY(${window.scrollY * 0.38}px) scale(1.06)`;
+  }
+}, { passive: true });
+
+/* ====================================================================
+   INTERSECTION OBSERVER — Scroll Reveal
+   ==================================================================== */
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('revealed');
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+/* ====================================================================
+   ANIMATED STATS COUNTER
+   ==================================================================== */
+let countersStarted = false;
+
+function animateCounters() {
+  if (countersStarted) return;
+  countersStarted = true;
+  document.querySelectorAll('.counter').forEach(counter => {
+    const target = +counter.getAttribute('data-target');
+    const isDecimal = target < 10; // treat small numbers (e.g. rating 4.9) as decimal
+    let start = 0;
+    const duration = 1800;
+    const step = 16;
+    const increment = target / (duration / step);
+
+    const tick = () => {
+      start += increment;
+      if (start < target) {
+        counter.textContent = isDecimal
+          ? (start).toFixed(1)
+          : Math.floor(start).toLocaleString();
+        setTimeout(tick, step);
+      } else {
+        counter.textContent = isDecimal
+          ? target.toFixed(1)
+          : target.toLocaleString();
+      }
+    };
+    tick();
+  });
+}
+
+// Observe hero stats section
+const statsSection = document.querySelector('.grid.grid-cols-2.lg\\:grid-cols-4');
+if (statsSection) {
+  new IntersectionObserver((entries) => {
+    if (entries[0].isIntersecting) animateCounters();
+  }, { threshold: 0.3 }).observe(statsSection);
+}
+
+/* ====================================================================
+   BILINGUAL LANGUAGE ENGINE
+   Swaps all elements with data-en / data-id attributes
+   ==================================================================== */
+let currentLang = 'en';
+
+function setLang(lang) {
+  currentLang = lang;
+  document.documentElement.setAttribute('data-lang', lang);
+
+  // Swap text nodes
+  document.querySelectorAll('[data-en][data-id]').forEach(el => {
+    const val = el.getAttribute(`data-${lang}`);
+    if (!val) return;
+
+    // Handle input / textarea / select placeholders
+    if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+      el.placeholder = val;
+    } else if (el.tagName === 'OPTION') {
+      el.textContent = val;
+    } else {
+      el.textContent = val;
+    }
+  });
+
+  // Update lang buttons
+  ['nav-lang-en','nav-lang-id','mob-lang-en','mob-lang-id'].forEach(id => {
+    const btn = document.getElementById(id);
+    if (!btn) return;
+    btn.classList.toggle('active', id.endsWith(lang));
+  });
+}
+
+/* ====================================================================
+   SERVICE CARD → Auto-populate Booking Form
+   ==================================================================== */
+function selectService(name, price) {
+  // Populate select
+  const select = document.getElementById('f-service');
+  for (let opt of select.options) {
+    if (opt.value === name) { opt.selected = true; break; }
+  }
+
+  // Highlight selected card button
+  document.querySelectorAll('.btn-select-service').forEach(btn => btn.classList.remove('selected'));
+  const cards = document.querySelectorAll('.service-card');
+  cards.forEach(card => {
+    if (card.getAttribute('data-service') === name) {
+      card.querySelector('.btn-select-service').classList.add('selected');
+    }
+  });
+
+  // Smooth scroll to booking
+  setTimeout(() => {
+    document.getElementById('booking').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 200);
+}
+
+/* ====================================================================
+   BOOKING ENGINE → WhatsApp API
+   ==================================================================== */
+function submitBooking() {
+  const name    = document.getElementById('f-name').value.trim();
+  const phone   = document.getElementById('f-phone').value.trim();
+  const date    = document.getElementById('f-date').value;
+  const service = document.getElementById('f-service').value;
+  const notes   = document.getElementById('f-notes').value.trim();
+
+  if (!name || !phone || !date || !service) {
+    alert(currentLang === 'id'
+      ? 'Harap lengkapi semua kolom wajib.'
+      : 'Please fill in all required fields.');
+    return;
+  }
+
+  // ============================================================
+  // WA MESSAGE TEMPLATE — Edit the text below as needed
+  // ============================================================
+  const msg = currentLang === 'id'
+    ? `Halo [BUSINESS_NAME] 👋\n\nSaya ingin membuat reservasi:\n\n👤 *Nama:* ${name}\n📱 *No. HP:* ${phone}\n💆 *Layanan:* ${service}\n📅 *Tanggal:* ${date}${notes ? `\n📝 *Catatan:* ${notes}` : ''}\n\nMohon konfirmasinya ya, terima kasih!`
+    : `Hello [BUSINESS_NAME] 👋\n\nI'd like to make a reservation:\n\n👤 *Name:* ${name}\n📱 *Phone:* ${phone}\n💆 *Service:* ${service}\n📅 *Date:* ${date}${notes ? `\n📝 *Notes:* ${notes}` : ''}\n\nPlease confirm, thank you!`;
+
+  const waURL = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`;
+  window.open(waURL, '_blank', 'noopener');
+}
+
+/* ====================================================================
+   GALLERY FILTER
+   ==================================================================== */
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    // Active state
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    const filter = btn.getAttribute('data-filter');
+
+    document.querySelectorAll('.gallery-item').forEach(item => {
+      const cat = item.getAttribute('data-category');
+      const show = filter === 'all' || cat === filter;
+
+      if (show) {
+        item.classList.remove('hidden-item');
+        // Re-trigger reveal
+        setTimeout(() => item.classList.add('revealed'), 10);
+      } else {
+        item.classList.add('hidden-item');
+        item.classList.remove('revealed');
+      }
+    });
+  });
+});
+
+/* ====================================================================
+   MOBILE MENU
+   ==================================================================== */
+let menuOpen = false;
+function toggleMobileMenu() {
+  menuOpen = !menuOpen;
+  document.getElementById('mobile-menu').classList.toggle('open', menuOpen);
+  document.getElementById('mobile-menu').setAttribute('aria-hidden', String(!menuOpen));
+
+  // Animate hamburger bars
+  const bars = document.querySelectorAll('.menu-bar');
+  if (menuOpen) {
+    bars[0].style.transform = 'rotate(45deg) translate(4px, 4px)';
+    bars[1].style.opacity   = '0';
+    bars[2].style.transform = 'rotate(-45deg) translate(4px, -4px)';
+    bars[0].style.background = 'var(--clr-accent)';
+    bars[2].style.background = 'var(--clr-accent)';
+  } else {
+    bars.forEach(b => {
+      b.style.transform = ''; b.style.opacity = '';
+      b.style.background = '';
+    });
+  }
+}
+function closeMobileMenu() {
+  menuOpen = false;
+  document.getElementById('mobile-menu').classList.remove('open');
+  document.getElementById('mobile-menu').setAttribute('aria-hidden', 'true');
+  document.querySelectorAll('.menu-bar').forEach(b => {
+    b.style.transform = ''; b.style.opacity = ''; b.style.background = '';
+  });
+}
+</script>
+
+</body>
+</html>
